@@ -278,24 +278,27 @@ function Flyout_UpdateFlyoutArrow(button)
    arrow:Show()
    arrow.texture:ClearAllPoints()
 
+   local size1 = 10  -- large value: 20
+   local size2 = 6  -- large value: 12
+
    if direction == 'BOTTOM' then
-      arrow.texture:SetWidth(20)
-      arrow.texture:SetHeight(12)
+      arrow.texture:SetWidth(size1)
+      arrow.texture:SetHeight(size2)
       arrow.texture:SetTexCoord(0, 0.565, 0.315, 0)
       arrow.texture:SetPoint('BOTTOM', arrow, 0, -6)
    elseif direction == 'LEFT' then
-      arrow.texture:SetWidth(12)
-      arrow.texture:SetHeight(20)
+      arrow.texture:SetWidth(size2)
+      arrow.texture:SetHeight(size1)
       arrow.texture:SetTexCoord(0, 0.315, 0.375, 1)
       arrow.texture:SetPoint('LEFT', arrow, -6, 0)
    elseif direction == 'RIGHT' then
-      arrow.texture:SetWidth(12)
-      arrow.texture:SetHeight(20)
+      arrow.texture:SetWidth(size2)
+      arrow.texture:SetHeight(size1)
       arrow.texture:SetTexCoord(0.315, 0, 0.375, 1)
       arrow.texture:SetPoint('RIGHT', arrow, 6, 0)
    else
-      arrow.texture:SetWidth(20)
-      arrow.texture:SetHeight(12)
+      arrow.texture:SetWidth(size1)
+      arrow.texture:SetHeight(size2)
       arrow.texture:SetTexCoord(0, 0.565, 0, 0.315)
       arrow.texture:SetPoint('TOP', arrow, 0, 6)
    end
