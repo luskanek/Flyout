@@ -269,6 +269,12 @@ function Flyout_Hide(keepOpenIfSticky)
 
       button = _G['FlyoutButton' .. i]
    end
+
+   -- Restore arrow to original strata (it was moved to FULLSCREEN in Flyout_Show())
+   if _G['FlyoutButton1'] and not _G['FlyoutButton1']:IsVisible() and _G['FlyoutButton1'].flyoutParent then
+      local arrow = _G[_G['FlyoutButton1'].flyoutParent:GetName() .. 'FlyoutArrow']
+      arrow:SetFrameStrata(arrow.flyoutOriginalStrata)
+   end
 end
 
 
@@ -312,8 +318,12 @@ function Flyout_Show(button)
    local size = Flyout_Config['BUTTON_SIZE']
    local offset = size
 
+   -- Put arrow above the flyout buttons.
+   _G[button:GetName() .. 'FlyoutArrow']:SetFrameStrata("FULLSCREEN")
+
    for i, n in button.flyoutActions do
       local b = _G['FlyoutButton' .. i] or CreateFrame('CheckButton', 'FlyoutButton' .. i, UIParent, 'FlyoutButtonTemplate')
+      b.flyoutParent = button
 
       -- Things that only need to happen once.
       if not b.cooldown then
@@ -396,7 +406,7 @@ function Flyout_UpdateFlyoutArrow(button)
       arrow = CreateFrame('Frame', button:GetName() .. 'FlyoutArrow', button)
       arrow:SetPoint('TOPLEFT', button)
       arrow:SetPoint('BOTTOMRIGHT', button)
-      arrow:SetFrameStrata('FULLSCREEN')
+      arrow.flyoutOriginalStrata = arrow:GetFrameStrata()
       arrow.texture = arrow:CreateTexture(arrow:GetName() .. 'Texture', 'ARTWORK')
       arrow.texture:SetTexture('Interface\\AddOns\\Flyout\\assets\\FlyoutButton')
    end
