@@ -1,0 +1,54 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\FrameXML\UI.xsd">
+    <CheckButton name="FlyoutButtonTemplate" virtual="true" inherits="ActionButtonTemplate" parent="UIParent" hidden="true" frameStrata="FULLSCREEN">
+        <HitRectInsets>
+            <AbsInset left="-3" right="-3" top="-3" bottom="-3" />
+        </HitRectInsets>
+        <Backdrop bgFile="Interface/Tooltips/UI-Tooltip-Background">
+            <BackgroundInsets left="-1" right="-1" top="-1" bottom="-1" />
+            <Color r="0" g="0" b="0" />
+        </Backdrop>
+        <NormalTexture name="$parentNormalTexture">
+            <TexCoords left="0.08" right="0.92" top="0.08" bottom="0.92" />
+            <Anchors>
+                <Anchor point="TOPLEFT">
+                    <Offset>
+                        <AbsDimension x="1" y="-1" />
+                    </Offset>
+                </Anchor>
+                <Anchor point="BOTTOMRIGHT">
+                    <Offset>
+                        <AbsDimension x="-1" y="1" />
+                    </Offset>
+                </Anchor>
+            </Anchors>
+        </NormalTexture>
+        <Scripts>
+            <OnLoad>
+                this.flyoutAction = ""
+                this.flyoutActionType = -1
+
+                this:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
+            </OnLoad>
+            <OnClick>
+                Flyout_OnClick(this)
+            </OnClick>
+            <OnEnter>
+                GameTooltip_SetDefaultAnchor(GameTooltip, this)
+                if this.flyoutActionType == 0 then
+                    GameTooltip:SetSpell(this.flyoutAction, 'spell')
+                elseif this.flyoutActionType == 1 then
+                    GameTooltip:SetText(GetMacroInfo(this.flyoutAction), 1, 1, 1)
+                end
+                GameTooltip:Show()
+            </OnEnter>
+            <OnLeave>
+                GameTooltip:Hide()
+
+                local focus = GetMouseFocus()
+                if focus and not strfind(focus:GetName(), 'Flyout') then
+                    Flyout_Hide()
+                end
+            </OnLeave>
+        </Scripts>
+    </CheckButton>
+</Ui>
