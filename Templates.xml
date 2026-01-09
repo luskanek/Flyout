@@ -36,6 +36,8 @@
                 GameTooltip_SetDefaultAnchor(GameTooltip, this)
                 if this.flyoutActionType == 0 then
                     GameTooltip:SetSpell(this.flyoutAction, 'spell')
+                elseif this.flyoutActionType == 2 then
+                    GameTooltip:SetBagItem(GetBagPosition(this.flyoutAction))
                 elseif this.flyoutActionType == 1 then
                     GameTooltip:SetText(GetMacroInfo(this.flyoutAction), 1, 1, 1)
                 end
