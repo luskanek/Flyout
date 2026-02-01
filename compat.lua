@@ -46,6 +46,49 @@ local function GetActionButton_PF(action)
     return _G[bar .. 'Button' .. i]
 end
 
+-- Dragonflight3
+local function GetActionButton_Dragonflight3(action)
+    local bar, index
+
+    if action >= 1 and action <= 12 then
+        bar = 'DF_MainBar'
+        index = action
+
+    elseif action >= 13 and action <= 24 then
+        bar = 'DF_MultiBar5'
+        index = action - 12
+
+    elseif action >= 25 and action <= 36 then
+        bar = 'DF_MultiBar4'
+        index = action - 24
+
+    elseif action >= 37 and action <= 48 then
+        bar = 'DF_MultiBar3'
+        index = action - 36
+
+    elseif action >= 49 and action <= 60 then
+        bar = 'DF_MultiBar2'
+        index = action - 48
+
+    elseif action >= 61 and action <= 72 then
+        bar = 'DF_MultiBar1'
+        index = action - 60
+
+    elseif action >= 133 and action <= 142 then
+        bar = 'DF_PetBar'
+        index = action - 132
+
+    elseif action >= 200 and action <= 209 then
+        bar = 'DF_StanceBar'
+        index = action - 199
+    end
+
+    if bar and index then
+        return _G[bar .. 'Button' .. index]
+    end
+end
+
+
 local function HandleEvent()
     if IsAddOnLoaded('Bongos') and IsAddOnLoaded('Bongos_ActionBar') then
         Flyout_GetActionButton = GetActionButton_Bongos
@@ -54,6 +97,10 @@ local function HandleEvent()
     if IsAddOnLoaded('pfUI') then
         Flyout_GetActionButton = GetActionButton_PF
     end
+	
+	if IsAddOnLoaded('-Dragonflight3') then
+		Flyout_GetActionButton = GetActionButton_Dragonflight3
+	end
 end
 
 -- override original functions
