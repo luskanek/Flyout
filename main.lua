@@ -77,6 +77,56 @@ local function strsplit(str, delimiter, fillTable)
    return fillTable
 end
 
+-- ITEMS
+-- this can all be written better, but I don't care
+function GetBagPosition(name)
+  for bag = 0,4 do
+    for slot = 1,GetContainerNumSlots(bag) do
+      local item = GetContainerItemLink(bag,slot)
+      if item and string.find(strlower(item),strlower(name)) then
+        return bag, slot
+      end
+    end
+  end
+end
+
+function GetItemTexture(name)
+  for bag = 0,4 do
+    for slot = 1,GetContainerNumSlots(bag) do
+      local item = GetContainerItemLink(bag,slot)
+      if item and string.find(strlower(item),strlower(name)) then
+         local texture, _, _, _, _ = GetContainerItemInfo(bag,slot);
+        return texture
+      end
+    end
+  end
+end
+
+function GetBagItemByName(name)
+  for bag = 0,4 do
+    for slot = 1,GetContainerNumSlots(bag) do
+      local item = GetContainerItemLink(bag,slot)
+      if item and string.find(strlower(item),strlower(name)) then
+         local _,_,itemLink = string.find(GetContainerItemLink(bag,slot),"(item:%d+)")
+        return itemLink
+      end
+    end
+  end
+end
+
+function UseContainerItemByName(search)
+  for bag = 0,4 do
+    for slot = 1,GetContainerNumSlots(bag) do
+      local item = GetContainerItemLink(bag,slot)
+      if item and string.find(strlower(item),strlower(search)) then
+        UseContainerItem(bag,slot)
+      end
+    end
+  end
+end
+-- ITEMS
+
+
 -- credit: https://github.com/DanielAdolfsson/CleverMacro
 local function GetSpellSlotByName(name)
    name = strlower(name)
@@ -99,6 +149,8 @@ end
 local function GetFlyoutActionInfo(action)
    if GetSpellSlotByName(action) then
       return GetSpellSlotByName(action), 0
+   elseif GetBagItemByName(action) then
+      return GetBagItemByName(action), 2
    elseif GetMacroIndexByName(action) then
       return GetMacroIndexByName(action), 1
    end
@@ -243,6 +295,8 @@ function Flyout_OnClick(button)
          CastSpell(button.flyoutAction, 'spell')
       elseif button.flyoutActionType == 1 then
          Flyout_ExecuteMacro(button.flyoutAction)
+      elseif button.flyoutActionType == 2 then
+         UseContainerItem(GetBagPosition(button.flyoutAction))
       end
 
       Flyout_Hide(true)
@@ -381,6 +435,8 @@ function Flyout_Show(button)
          texture = GetSpellTexture(b.flyoutAction, 'spell')
       elseif b.flyoutActionType == 1 then
          _, texture = GetMacroInfo(b.flyoutAction)
+      elseif b.flyoutActionType == 2 then
+         texture = GetItemTexture(b.flyoutAction)
       end
 
       if texture then
